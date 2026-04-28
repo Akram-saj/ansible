@@ -25,7 +25,7 @@ spec:
 apiVersion: v1
 data:
   INFLUXDB_DATABASE: Z2xvYmV4
-  INFLUXDB_HOST: aW5mbHV4ZGIuaW5mbHV4ZGItcHJvamVjdC11c2VyMS5zdmMuY2x1c3Rlci5sb2NhbA==
+  INFLUXDB_HOST: aW5mbHV4ZGIuaW5mbHV4ZGItcHJvamVjdC5zdmMuY2x1c3Rlci5sb2NhbA==
   INFLUXDB_PASSWORD: Z2xvYmV4MTIz
   INFLUXDB_USERNAME: Z2xvYmV4
 kind: Secret
@@ -42,14 +42,15 @@ metadata:
   name: influxdb
   namespace: influxdb-project
 spec:
+  progressDeadlineSeconds: 1200
   replicas: 1
   selector:
     matchLabels:
       deployment: influxdb
   strategy:
     rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+      maxSurge: 0
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
@@ -59,20 +60,55 @@ spec:
         deployment: influxdb
     spec:
       containers:
-      - image: influxdb@sha256:11c5ec3b6f57701fb9ba1822a6ba58cf39e2deab5aa8d37b52de06fc6ec76723
+      - image: quay.io/ajaaveed/influxdb:2.7.1-s390x
         imagePullPolicy: IfNotPresent
         name: influxdb-pod
         securityContext:
           capabilities:
             drop:
               - ALL
-          allowPrivilegeEscalation: false        
+          allowPrivilegeEscalation: false
+        env:
+        # icr.io/ibmz/influxdb uses the same entrypoint as docker.io/library/influxdb (DOCKER_INFLUXDB_INIT_*).
+        # That image does not ship the influx CLI; do not rely on oc exec influx setup in the playbook.
+        # If GET /api/v2/setup returns "allowed": true while Grafana/kafka get 401, run POST /api/v2/setup once with these same credentials (manual runbook / doc step).
+        - name: DOCKER_INFLUXDB_INIT_MODE
+          value: setup
+        - name: DOCKER_INFLUXDB_INIT_USERNAME
+          value: globex
+        - name: DOCKER_INFLUXDB_INIT_PASSWORD
+          value: globex123
+        - name: DOCKER_INFLUXDB_INIT_ORG
+          value: globex
+        - name: DOCKER_INFLUXDB_INIT_BUCKET
+          value: globex-bucket
+        - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+          value: 91XvhQY1nzme54HHzaRVlJUp8lJ2EoB8frQ7rksiZju3G5eAomPSBifL3oveHlAPiV8yDn4AmjmJ6fZA2ajXfQ==
+        - name: INFLUXD_HTTP_BIND_ADDRESS
+          value: ":8086"
+        - name: HOME
+          value: /var/lib/influxdb2
         envFrom:
         - secretRef:
             name: influxdb-creds
         ports:
         - containerPort: 8086
           protocol: TCP
+        # Allow slow first open of bolt/engine on PVC; readiness stays false until this succeeds.
+        startupProbe:
+          tcpSocket:
+            port: 8086
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 120
+        readinessProbe:
+          tcpSocket:
+            port: 8086
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
         resources: {}
         volumeMounts:
         - mountPath: /etc/influxdb2
@@ -93,8 +129,9 @@ spec:
       - emptyDir: {}
         name: influxdb-volume-2
       - name: var-lib-influxdb
-        persistentVolumeClaim:
-          claimName: influxdb-pvc        
+        emptyDir: {}
+          #persistentVolumeClaim:
+          #claimName: influxdb-pvc
 
 ---
 
