@@ -65,8 +65,8 @@ spec:
 
         aiml-moderate-reviews:
           image:
-            repository: quay.io/globex-sentiment-analysis/sentiment-analysis-moderate-reviews
-            tag: latest
+            repository: quay.io/ajaaveed/sentiment-analysis-moderate-reviews
+            tag: s390x
 
           kafkaSink:
             moderated: http://kafka-sink-ingress.{{ serverless_eventing_namespace }}.svc.cluster.local/{{ globex_sentiment_analysis_namespace }}/moderated-reviews-sink
@@ -78,8 +78,8 @@ spec:
 
         aiml-sentiment-reviews:
           image:
-            repository: quay.io/globex-sentiment-analysis/sentiment-analysis-analyze-reviews
-            tag: latest
+            repository: quay.io/ajaaveed/sentiment-analysis-analyze-reviews
+            tag: s390x
 
           kafkaSink:
             sentiment: http://kafka-sink-ingress.{{ serverless_eventing_namespace }}.svc.cluster.local/{{ globex_sentiment_analysis_namespace }}/reviews-sentiment-sink
