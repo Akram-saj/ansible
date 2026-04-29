@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-        - image: quay.io/globex-sentiment-analysis/reviews-simulator:latest
+        - image: quay.io/ajaaveed/reviews-simulator:s390x
           env:
             - name: PRODUCT_REVIEWS_SERVICE_URL
               value: http://product-reviews:8080
