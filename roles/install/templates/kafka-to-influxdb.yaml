@@ -50,8 +50,7 @@ spec:
     spec:
       containers:
         - name: kafka-to-influxdb
-          image: >-
-            quay.io/globex-sentiment-analysis/kafka-to-influx-connector:latest
+          image: quay.io/ajaaveed/kafka-to-influxdb:s390x
           securityContext:
             capabilities:
               drop:
