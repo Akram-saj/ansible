@@ -196,7 +196,7 @@ kafka_broker_name: kafka
 kafka_security_protocol: SASL_PLAINTEXT
 kafka_sasl_mechanism: SCRAM-SHA-512
 kafka_client_id: globex
-kafka_client_secret: globex
+kafka_client_secret: globex-scram-fips-password-32chars!
 
 globex_user_password: openshift
 
