@@ -38,15 +38,11 @@ spec:
           nameOverride: {{ kafka_broker_name }}
           authentication:
             <<: *kafka-security
+          console:
+            hostname: streams-console-{{ globex_mw_namespace }}.{{ r_openshift_subdomain }}
 
         kafka-topics:
           kafka:
-            namespace: *namespace
-
-        kafdrop:
-          kafka:
-            <<: *kafka-security
-            bootstrapServer: *bootstrapServer
             namespace: *namespace
 
         activity-tracking:

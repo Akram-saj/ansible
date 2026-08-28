@@ -14,7 +14,7 @@ data:
   moderated_reviews_sink: http://kafka-sink-ingress.knative-eventing.svc.cluster.local/sentiment-analysis/moderated-reviews-sink
   not_good_language_topic: reviews.denied
   org: globex
-  password: globex
+  password: globex-scram-fips-password-32chars!
   reviews_sentiment_sink: http://kafka-sink-ingress.knative-eventing.svc.cluster.local/sentiment-analysis/reviews_sentiment_sink
   sasl_mechanism: SCRAM-SHA-512
   security_protocol: SASL_PLAINTEXT

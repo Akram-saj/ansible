@@ -5,6 +5,10 @@ silent: false
 # AMQ Streams Operator
 # ------------------------------------------------
 
+amq_streams_console_operator_name: amq-streams-console
+amq_streams_console_operator_namespace: openshift-operators
+amq_streams_console_operator_channel: ""
+amq_streams_console_operator_starting_csv: ""
 amq_streams_operator_channel: ""
 amq_streams_operator_automatic_install_plan_approval: true
 amq_streams_operator_starting_csv: ""
@@ -164,7 +168,7 @@ rhsso_application_namespace: openshift-gitops
 rhsso_application_name: rhsso
 rhsso_namespace: "{{ rhsso_operator_namespace }}"
 rhsso_gitops_repo: https://github.com/Akram-saj/helm.git
-rhsso_gitops_repo_tag: main
+rhsso_gitops_repo_tag: v1
 rhsso_gitops_repo_path: globex-sentiment-analysis/globex-rhsso
 
 rhsso_cr_name: rhsso
@@ -185,7 +189,7 @@ globex_application_name: globex
 globex_application_namespace: openshift-gitops
 
 globex_application_repo: https://github.com/Akram-saj/helm.git
-globex_application_repo_tag: main
+globex_application_repo_tag: v1
 globex_application_repo_path: globex-sentiment-analysis/globex
 
 kafka_broker_name: kafka
@@ -206,5 +210,5 @@ globex_sentiment_analysis_application_name: sentiment-analysis
 globex_sentiment_analysis_application_namespace: openshift-gitops
 
 globex_sentiment_analysis_application_repo: https://github.com/Akram-saj/helm.git
-globex_sentiment_analysis_application_repo_tag: main
+globex_sentiment_analysis_application_repo_tag: v1
 globex_sentiment_analysis_application_repo_path: globex-sentiment-analysis/sentiment-analysis
